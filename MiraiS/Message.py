@@ -1,6 +1,6 @@
 import json
 from io import BytesIO
-
+from datetime import datetime
 import requests
 
 
@@ -14,11 +14,11 @@ class Messgae:
             self.images = [Image(i) for i in result["data"]["messageChain"] if i["type"] == "Image"]
             self.voices = [Voice(i) for i in result["data"]["messageChain"] if i["type"] == "Voice"]
             if self.messageType == "GroupMessage":
-                self.group = Group(result["group"],session)
-                self.sender = Member(result["sender"], True,session)
+                self.group = Group(result["data"]["sender"]["group"],session)
+                self.sender = Member(result["data"]["sender"], True,session)
             else:
                 self.group = None
-                self.sender = Member(result["sender"], False,session)
+                self.sender = Member(result["data"]["sender"], False,session)
         else:
             self.messageChain = []
             self.session = session
@@ -48,6 +48,14 @@ class Messgae:
     def createMessageChain(self):
         return self.messageChain
 
+    def __str__(self):
+        time="[{}]".format(datetime.today().ctime())
+        messagetype="[{}]".format(self.messageType)
+        sender="[Sender->{}]".format(self.sender.qid)
+        text=":{}".format(self.contentText)
+        return time+messagetype+sender+text
+
+
 
 class Image:
     def __init__(self, data):
@@ -65,18 +73,17 @@ class Voice:
 
 class Member:
     def __init__(self, data, isGroup,session):
-        result = json.loads(data)
         self.session=session
-        self.qid = result["id"]
+        self.qid = data["id"]
         self.isGroup=isGroup
         if isGroup:
-            self.nickname = result["memberName"]
-            self.permission = result["permission"]
-            self.joinTimeStamp = result["joinTimeStamp"]
-            self.lastSpeckTimeStamp = result["lastSpeckTimeStamp"]
-            self.muteTimeRemaining = result["muteTimeRemaining"]
+            self.nickname = data["memberName"]
+            self.permission = data["permission"]
+            self.joinTimeStamp = data["joinTimestamp"]
+            self.lastSpeckTimeStamp = data["lastSpeakTimestamp"]
+            self.muteTimeRemaining = data["muteTimeRemaining"]
         else:
-            self.nickname = result["nickname"]
+            self.nickname = data["nickname"]
 
     def sendMessage(self, messageChain):
         if self.isGroup:
@@ -93,10 +100,9 @@ class Member:
 
 class Group:
     def __init__(self, data, session):
-        result = json.load(data)
-        self.gid = result["id"]
-        self.name = result["name"]
-        self.permission = result["permission"]
+        self.gid = data["id"]
+        self.name = data["name"]
+        self.permission = data["permission"]
         self.session = session
 
     def sendMessage(self, messageChain):
