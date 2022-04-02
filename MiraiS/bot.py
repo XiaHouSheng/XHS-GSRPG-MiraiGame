@@ -16,7 +16,7 @@ class bot:
             self.session = json.loads(await websocket.recv())["data"]["session"]
             while True:
                 recv_text = await websocket.recv()
-                MessageObj = Message.Messgae(data=recv_text)
+                MessageObj = Message.Message(data=recv_text)
                 print(MessageObj.__str__())
                 if MessageObj.messageType=="GroupMessage":
                     await func["GroupMsg"](MessageObj)

@@ -4,7 +4,7 @@ from datetime import datetime
 import requests
 
 
-class Messgae:
+class Message:
     def __init__(self, data=None, session=None):
         if data:
             result = json.loads(data)

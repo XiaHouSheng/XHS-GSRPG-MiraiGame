@@ -2,7 +2,7 @@ from MiraiS import bot
 from data import DataManger
 from MiraiS import Message
 
-bot = bot(port="5700", qid=213303398, verifykey="mzxclhml10")
+bot = bot()
 session = bot.session
 
 
