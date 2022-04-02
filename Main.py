@@ -1,6 +1,6 @@
-from MiraiS import bot
-from data import DataManger
-from MiraiS import Message
+from MiraiS.bot import bot
+from data.DataManager import Player
+from MiraiS.Message import Message
 
 bot = bot()
 session = bot.session

@@ -38,17 +38,3 @@ class bot:
 
     def runServer(self):
         asyncio.get_event_loop().run_until_complete(self.OnMsg(self._taskes))
-
-
-bot = bot()
-
-
-@bot.register("GroupMsg")
-async def onMsg(data):
-    pass
-
-@bot.register("FriendMsg")
-async def onMsg(data):
-    pass
-
-bot.runServer()
