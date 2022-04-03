@@ -4,8 +4,8 @@ import hashlib
 import time
 
 def LaiYiFa(qid):
-    md5 = hashlib.md5(bytes(str(qid).encode("utf-8")))
-    seed = md5.hexdigest()+str(time.time())
+    md5 = hashlib.md5(bytes((str(qid)+str(time.time())+"saltyXiaHouSheng").encode("utf-8")))
+    seed = md5.hexdigest()
     random.seed(seed)
 
 
